@@ -63,6 +63,7 @@ app.get('/api/users', (req, res) => {
 
 app.post('/api/users/:_id/exercises', async (req, res) => {
   const { description, duration, date } = req.body;
+  console.log(req.params)
   const { _id } = req.params;
 
   // find username by id
@@ -85,7 +86,13 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
 
   await Exercise.create(input, (err, result) => {
     if (err) return console.error(err);
-    res.json(result);
+    res.json({
+      username: result.username,
+      description: result.description,
+      duration: result.duration,
+      date: result.date,
+      _id: _id,
+    });
   });
 })
 
@@ -101,8 +108,8 @@ app.get('/api/users/:_id/logs', async (req, res) => {
   if (from !== undefined && to !== undefined) {
     logs = logs.filter(log => {
       if (log.date) {
-        console.log(new Date(log.date).getTime());
-        console.log(new Date(from).getTime());
+        // console.log(new Date(log.date).getTime());
+        // console.log(new Date(from).getTime());
         return new Date(log.date).getTime() >= new Date(from).getTime() && new Date(log.date).getTime() <= new Date(to).getTime()
       }
     })
